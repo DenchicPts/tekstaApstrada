@@ -1,18 +1,23 @@
 #include "lib.h"
 
-bool hasUniqueLetters(const string& word) {
+bool hasUniqueLetters(const string& a) {
 	unordered_set<char> uniqueLetters;
-	for (char letter : word) {
+	string word = a; // РІСЂРµРјРµРЅРѕ РєРѕРїРёСЂСѓСЋ СЃР»РѕРІРѕ
+	for (char& letter : word) // С†РёРєР» РґР»СЏ С‚РѕРіРѕ С‡С‚РѕР±С‹ СЃРѕС…СЂР°РЅРёС‚СЊ РІСЃРµ Р±СѓРєРІС‹ РІ РЅРёР¶РЅРµРј СЂРµРіРёСЃС‚СЂРµ
+		letter = tolower(static_cast<unsigned char>(letter));
+	
+
+	for (const char& letter : word) {
 		if (uniqueLetters.count(letter) > 0) {
-			return false;  // Найдено дублирование
+			return false;  // РќР°Р№РґРµРЅРѕ РґСѓР±Р»РёСЂРѕРІР°РЅРёРµ
 		}
 		uniqueLetters.insert(letter);
 	}
-	return true;  // Все буковки уникальны
+	return true;  // Р’СЃРµ Р±СѓРєРѕРІРєРё СѓРЅРёРєР°Р»СЊРЅС‹
 }
 
 vector<string> WordsWithUniqueLetters(const vector<pair<string, int>>& wordPairs) {
-	// поиск слов с уникальными буковками
+	// РїРѕРёСЃРє СЃР»РѕРІ СЃ СѓРЅРёРєР°Р»СЊРЅС‹РјРё Р±СѓРєРѕРІРєР°РјРё
 	vector<string> result;
 	for (const auto& wordPair : wordPairs) {
 		const string& word = wordPair.first;
@@ -24,7 +29,7 @@ vector<string> WordsWithUniqueLetters(const vector<pair<string, int>>& wordPairs
 }
 
 int UniqueLetters(const map<string, int>& word_counts) {
-	// Подсчет уникальных слов
+	// РџРѕРґСЃС‡РµС‚ СѓРЅРёРєР°Р»СЊРЅС‹С… СЃР»РѕРІ
 	int unique_word_count = 0;
 	for (const auto& pair : word_counts) {
 		if (pair.second == 1) {
@@ -35,7 +40,7 @@ int UniqueLetters(const map<string, int>& word_counts) {
 }
 
 string longest_word(const map < string, int> word_counts) {
-	// Поиск самого длинного слова
+	// РџРѕРёСЃРє СЃР°РјРѕРіРѕ РґР»РёРЅРЅРѕРіРѕ СЃР»РѕРІР°
 	string longest_word;
 	for (const auto& pair : word_counts) {
 		if (pair.first.length() > longest_word.length()) {
@@ -48,29 +53,28 @@ string longest_word(const map < string, int> word_counts) {
 int main() {
 
 	string punctuation = ",./\'\";:?&^*(){}[]$#@!<>-=+1234567890";
-
 	string filename = "text.txt";
 	ifstream file(filename);
-	if (!file.is_open()) { // в случае если файла нету
-		cout << "Не удалось открыть файл" << endl;
+	if (!file.is_open()) { // РІ СЃР»СѓС‡Р°Рµ РµСЃР»Рё С„Р°Р№Р»Р° РЅРµС‚Сѓ
+		cout << "РќРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РєСЂС‹С‚СЊ С„Р°Р№Р»" << endl;
 		return 0;
 	}
 
-	map<string, int> word_counts = wordCounter(file, punctuation); // считаю количество слов
+	map<string, int> word_counts = wordCounter(file, punctuation); // СЃС‡РёС‚Р°СЋ РєРѕР»РёС‡РµСЃС‚РІРѕ СЃР»РѕРІ
 	file.close();
 
-	vector<pair<string, int>> word_freq(word_counts.begin(), word_counts.end()); // создаю вектор, чтобы отсортировать по количеству
+	vector<pair<string, int>> word_freq(word_counts.begin(), word_counts.end()); // СЃРѕР·РґР°СЋ РІРµРєС‚РѕСЂ, С‡С‚РѕР±С‹ РѕС‚СЃРѕСЂС‚РёСЂРѕРІР°С‚СЊ РїРѕ РєРѕР»РёС‡РµСЃС‚РІСѓ
 
 	sort(word_freq.begin(), word_freq.end(), [](auto const& p1, auto const& p2) {
-		return p1.second > p2.second; // лямбда функция не обязательно, можно написать просто функцию, но я ведь знаю их так что мне можна. Я сам себе разрешаю
-		});// сортировка по частоте слов
+		return p1.second > p2.second; // Р»СЏРјР±РґР° С„СѓРЅРєС†РёСЏ РЅРµ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ, РјРѕР¶РЅРѕ РЅР°РїРёСЃР°С‚СЊ РїСЂРѕСЃС‚Рѕ С„СѓРЅРєС†РёСЋ, РЅРѕ СЏ РІРµРґСЊ Р·РЅР°СЋ РёС… С‚Р°Рє С‡С‚Рѕ РјРЅРµ РјРѕР¶РЅР°. РЇ СЃР°Рј СЃРµР±Рµ СЂР°Р·СЂРµС€Р°СЋ
+		});// СЃРѕСЂС‚РёСЂРѕРІРєР° РїРѕ С‡Р°СЃС‚РѕС‚Рµ СЃР»РѕРІ
 
 	vector<string> unique_words = WordsWithUniqueLetters(word_freq);
 
 	std::sort(unique_words.begin(), unique_words.end(), [](const string& a, const string& b) {
-		return a.size() > b.size();// сортировка по по самому большому количеству буковок
+		return a.size() > b.size();// СЃРѕСЂС‚РёСЂРѕРІРєР° РїРѕ РїРѕ СЃР°РјРѕРјСѓ Р±РѕР»СЊС€РѕРјСѓ РєРѕР»РёС‡РµСЃС‚РІСѓ Р±СѓРєРѕРІРѕРє
 	});
-		// Вывод результатов
+		// Р’С‹РІРѕРґ СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ
 	cout << "Total words: " << word_counts.size() << endl;
 	cout << "Unique words: " << UniqueLetters(word_counts) << endl;
 	cout << "Longest word: " << longest_word(word_counts) << endl;
@@ -80,7 +84,7 @@ int main() {
 		cout << word_freq[i].first << " : " << word_freq[i].second << "  ";
 	}
 	cout << endl;
-	// Вывод 5 слов с уникальными буквами
+	// Р’С‹РІРѕРґ 5 СЃР»РѕРІ СЃ СѓРЅРёРєР°Р»СЊРЅС‹РјРё Р±СѓРєРІР°РјРё
 	cout << "Words with all unique letters: ";
 	for (auto i = 0; i < 5; i++) {
 		cout << unique_words[i] << " ";
@@ -94,17 +98,17 @@ map<string, int> wordCounter(ifstream& file, string& punctuation)
 	map<string, int> word_counts;
 	string word;
 	while (file >> word) {
-		// Пропускаем слова, короче 4 символов
+		// РџСЂРѕРїСѓСЃРєР°РµРј СЃР»РѕРІР°, РєРѕСЂРѕС‡Рµ 4 СЃРёРјРІРѕР»РѕРІ
 		if (word.length() < 4) {
 			continue;
-		} // сделано потому что иначе он будет считать предлоги как слова которые часто употребляються в тексте
-		// Удаляем знаки препинания из слова
+		} // СЃРґРµР»Р°РЅРѕ РїРѕС‚РѕРјСѓ С‡С‚Рѕ РёРЅР°С‡Рµ РѕРЅ Р±СѓРґРµС‚ СЃС‡РёС‚Р°С‚СЊ РїСЂРµРґР»РѕРіРё РєР°Рє СЃР»РѕРІР° РєРѕС‚РѕСЂС‹Рµ С‡Р°СЃС‚Рѕ СѓРїРѕС‚СЂРµР±Р»СЏСЋС‚СЊСЃСЏ РІ С‚РµРєСЃС‚Рµ
+		// РЈРґР°Р»СЏРµРј Р·РЅР°РєРё РїСЂРµРїРёРЅР°РЅРёСЏ РёР· СЃР»РѕРІР°
 		for (char const& c : punctuation) {
 			word.erase(remove(word.begin(), word.end(), c), word.end());
-			// Удаляем символ c из строки word с помощью функции remove
-			// и затем удаляем символы, которые были перемещены в конец диапазона, с помощью метода erase
+			// РЈРґР°Р»СЏРµРј СЃРёРјРІРѕР» c РёР· СЃС‚СЂРѕРєРё word СЃ РїРѕРјРѕС‰СЊСЋ С„СѓРЅРєС†РёРё remove
+			// Рё Р·Р°С‚РµРј СѓРґР°Р»СЏРµРј СЃРёРјРІРѕР»С‹, РєРѕС‚РѕСЂС‹Рµ Р±С‹Р»Рё РїРµСЂРµРјРµС‰РµРЅС‹ РІ РєРѕРЅРµС† РґРёР°РїР°Р·РѕРЅР°, СЃ РїРѕРјРѕС‰СЊСЋ РјРµС‚РѕРґР° erase
 		}
-		// Увеличиваем счетчик для данного слова
+		// РЈРІРµР»РёС‡РёРІР°РµРј СЃС‡РµС‚С‡РёРє РґР»СЏ РґР°РЅРЅРѕРіРѕ СЃР»РѕРІР°
 		++word_counts[word];
 	}
 	return word_counts;
@@ -115,10 +119,10 @@ bool hasRepeatingLetters(const string& word) {
 	for (char c : word) {
 		if (isalpha(c)) {
 			if (letter_counts[c] > 0) {
-				return true;  // Есть повторяющиеся буквы
+				return true;  // Р•СЃС‚СЊ РїРѕРІС‚РѕСЂСЏСЋС‰РёРµСЃСЏ Р±СѓРєРІС‹
 			}
 			letter_counts[c]++;
 		}
 	}
-	return false;  // Нет повторяющихся букв
+	return false;  // РќРµС‚ РїРѕРІС‚РѕСЂСЏСЋС‰РёС…СЃСЏ Р±СѓРєРІ
 }
